@@ -1,4 +1,5 @@
 {
+  "homepage": "http://d2law.github.io/cf-hw",
   "name": "hw",
   "version": "1.0.0",
   "description": "",
@@ -12,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "gh-pages": "^3.0.0",
     "jest": "^26.0.1"
   },
   "dependencies": {
