@@ -20,7 +20,7 @@ app.use('/api', require('./consumer/message_consumer'));
 app.use('/api', require('./fe_api/feCall1'));
 
 app.listen(30000, () => {
-  console.log('Example app listening on port 8000!')
+  console.log('Example app listening on port 30000!')
 });
 
 module.exports = app;

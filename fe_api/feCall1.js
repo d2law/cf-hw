@@ -2,8 +2,17 @@ var express = require('express');
 var router = express.Router();
 
 var AWS = require('aws-sdk');
-AWS.config.update({region: 'us-east-2'});
-var db = new AWS.DynamoDB();
+const aws_remote_config =  {
+    accessKeyId: 'AKIAZFI5NMVWMVFLEXUT',
+    secretAccessKey: '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',
+    region: 'us-east-2',
+  }
+
+  AWS.config.update(aws_remote_config);
+
+
+  var db = new AWS.DynamoDB();
+
 
 router.get('/call1', function (req, res) {
 
@@ -39,12 +48,11 @@ router.get('/call1', function (req, res) {
   };
   
   // Call DynamoDB to add the item to the table
+  console.log("call db");
   db.putItem(params, function(err, data) {
     if (err) {
-      console.log("Error", err);
-      res.send("return err");
+      res.send("return" + err);
     } else {
-      console.log("Success", data);
       res.send("return success");
     }
   });
