@@ -7,7 +7,7 @@ var db = new AWS.DynamoDB();
 
 router.get('/call1', function (req, res) {
 
-   var userId = Math.random();
+   var userId = Math.random() + '';
    var d = new Date();
    var n = d.toISOString();
    var params = {
