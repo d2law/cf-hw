@@ -18,6 +18,7 @@ app.use(express.static('public'));
 app.use('/api', require('./consumer/message_consumer'));
 
 app.use('/api', require('./fe_api/feCall1'));
+app.use('/api', require('./fe_api/scan'));
 
 app.listen(30000, () => {
   console.log('Example app listening on port 30000!')
