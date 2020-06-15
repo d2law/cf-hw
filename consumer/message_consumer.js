@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var config = require("./../config");
 
-// apply rules on message body check
+// apply rules on message body check,only check if empty body and missing ID at the momnet
 function validator(body) {
     var errMsg  = '';
     if (Object.keys(body).length == 0) {
@@ -38,7 +38,6 @@ router.post('/sendMessage', function (req, res) {
     } else {
         params.QueueUrl = "https://sqs.us-east-2.amazonaws.com/629811275116/messagePipe";
     }
-
 
     params.MessageBody = JSON.stringify(body);
 
