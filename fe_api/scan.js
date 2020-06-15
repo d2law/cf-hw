@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var config = require("./../config");
 
-
 var docClient = new config.AWS.DynamoDB();
 
 async function scanForResults(){
@@ -10,7 +9,6 @@ async function scanForResults(){
         var params = {
             TableName: "cfIncomeMessage",
         };
-    
         return  await docClient.scan(params).promise();
     } catch (error) {
         res.send("error getting records");
@@ -19,10 +17,15 @@ async function scanForResults(){
 }
 
 
-
 router.get('/scan', async function (req, res) {
-    var retVal = await scanForResults();
+    var dbObj = await scanForResults();
     
+    var items = dbObj.Items;
+
+    var resultObj = [];
+    for ( var item in items) {
+        
+    }
 
     res.json(retVal);
 });
