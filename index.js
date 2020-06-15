@@ -14,11 +14,10 @@ app.use(express.json());
 app.use(upload.array()); 
 app.use(express.static('public'));
 
-//app.use('/api', require('./authAPI/auth'));
 app.use('/api', require('./consumer/message_consumer'));
 
-app.use('/api', require('./fe_api/feCall1'));
 app.use('/api', require('./fe_api/scan'));
+app.use('/api', require('./fe_api/searchUserTrans'));
 
 app.listen(30000, () => {
   console.log('Example app listening on port 30000!')

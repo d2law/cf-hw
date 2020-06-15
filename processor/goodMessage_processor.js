@@ -8,6 +8,7 @@ exports.handler = async(event, context, callback) => {
         // TODO - Add validations
         // TODO - Add more business logic
         var result = await saveItem(item);
+
         callback(null, result);
     }
 
@@ -15,7 +16,7 @@ exports.handler = async(event, context, callback) => {
 };
 
 function saveItem(item) {
-    return new Promise(resolve => {
+   return  new Promise(resolve => {
 
         var inputBody = new Object();
         
@@ -43,4 +44,5 @@ function saveItem(item) {
             }
         });
     });
+
 }

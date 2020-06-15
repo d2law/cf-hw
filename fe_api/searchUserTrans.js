@@ -4,12 +4,17 @@ var config = require("./../config");
 
 var docClient = new config.AWS.DynamoDB();
 
-async function scanForResults() {
+async function searchForResults(userId) {
     try {
         var params = {
             TableName: "cfIncomeMessage",
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': { 'S': userId }
+            },
         };
-        return await docClient.scan(params).promise();
+        console.log(params);
+        return await docClient.query(params).promise();
     } catch (error) {
         res.send("error getting records");
         console.error(error);
@@ -17,8 +22,14 @@ async function scanForResults() {
 }
 
 ///get all transaction from DB
-router.get('/scan', async function (req, res) {
-    var dbObj = await scanForResults();
+router.get('/getUserTrans', async function (req, res) {
+
+    if (!req.query.userId) {
+        //empty input
+        res.send("userId is missing");
+        return;
+    }
+    var dbObj = await searchForResults(req.query.userId);
 
     var items = dbObj.Items;
     var resultObj = items.map(({ userId, rate, currencyFrom, currencyTo, amountBuy, amountSell, timePlaced, originatingCountry, messageId, ipAddress }) =>
