@@ -48,6 +48,7 @@ router.post('/sendMessage', function (req, res) {
             res.json({error: errMsg + ' ' + data.MessageId});
         } else {
             res.json({ message: "Message sent successful " + data.MessageId });
+            console.log("Message sent successful " + data.MessageId );
         }
     });
 });

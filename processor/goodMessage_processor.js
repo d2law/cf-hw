@@ -45,4 +45,29 @@ function saveItem(item) {
         });
     });
 
+    function saveFXs(item) {
+        return  new Promise(resolve => {
+     
+            var item = (({ currencyFrom, currencyTo, amountSell, amountBuy }) => (
+                {  currencyFrom, currencyTo, amountSell, amountBu}))(JSON.parse(item.body));
+            
+
+     
+             var params = {
+                 TableName: 'fxAmt',
+                 Item: inputBody
+             };
+            
+             ddb.put(params, function(err, data) {
+                 if (err) {
+                     console.log(err);
+                     return err;
+                 }
+                 else {
+                     return data;
+                 }
+             });
+         });
+     
+
 }

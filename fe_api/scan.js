@@ -19,12 +19,12 @@ async function scanForResults() {
 ///get all transaction from DB
 router.get('/scan', async function (req, res) {
     var dbObj = await scanForResults();
+    var items = [];
+    for (var item of dbObj.Items) {
+        items.push(config.AWS.DynamoDB.Converter.unmarshall(item));
+    }
 
-    var items = dbObj.Items;
-    var resultObj = items.map(({ userId, rate, currencyFrom, currencyTo, amountBuy, amountSell, timePlaced, originatingCountry, messageId, ipAddress }) =>
-        ({ userId, rate, currencyFrom, currencyTo, amountBuy, amountSell, timePlaced, originatingCountry, messageId, ipAddress }));
-
-    res.json(resultObj);
+    res.json(items);
 });
 
 

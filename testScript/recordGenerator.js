@@ -1,4 +1,5 @@
 const axios = require('axios');
+var FormData = require('form-data');
 
 const currencyList = ['USD', 'EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD', 'HKD'];
 const countryList = ['US', 'UK', 'CN', 'HK', 'JP', 'AU', 'FR', 'CA', 'CH', 'NZ'];
@@ -25,10 +26,9 @@ function getRandom(min, max, digit = 0) {
     return (ranVal / expo);
 }
 
-
 // 10000 good messages
-for (var i = 0; i < 1000; i++) {
-    //var insertBody = new FormData();
+for (var i = 0; i < 100; i++) {
+    var insertBody = new FormData();
     var userId = getRandom(1234500, 12345600);
     var cFrom = getRandom(0, 7);
     var cTo = getRandom(0, 7);
@@ -42,11 +42,21 @@ for (var i = 0; i < 1000; i++) {
     var timePlaced = (new Date()).toISOString();
     var originatingCountry = countryList[getRandom(0, 9)];
 
-    //     insertBody.append('userId', '');
-    //     insertBody.append('valid', 1);
-    //     insertBody.append('count', 100);
+    insertBody.append('userId', userId);
+    insertBody.append('currencyFrom', currencyFrom);
+    insertBody.append('currencyTo',currencyTo);
+    insertBody.append('rate', rate);
+    insertBody.append('amountBuy', amountBuy);
+    insertBody.append('amountSell',amountSell);
+    insertBody.append('timePlaced', timePlaced);
+    insertBody.append('originatingCountry', originatingCountry);
+    
 
-    //     var res = await axios.post('http://localhost:8000/api/insertData', insertBody, token)
+    console.log(insertBody);
+     axios.post('http://localhost:30000/api/sendMessage', insertBody, { headers: insertBody.getHeaders() }).then(function (response) {
+         console.log(response);
+       })
+    
 }
 
 // // 50 bad messages
