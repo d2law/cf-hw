@@ -6,8 +6,8 @@ const auth_config = {
 };
 
 const aws_remote_config = {
-  accessKeyId: 'AKIAZFI5NMVWMVFLEXUT',
-  secretAccessKey: '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',
+  accessKeyId: 'AKIAZFI5NMVWJSZWXPCY',
+  secretAccessKey: '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',
   region: 'us-east-2',
 }
 
