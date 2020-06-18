@@ -1,0 +1,8 @@
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "USD"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "EUR"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "JPY"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "GBP"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "CHF"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "CAD"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "AUD"}, "currentAmt": {"N":"0"}  }'
+aws dynamodb put-item --table-name fxAmt --item '{ "currency": {"S": "HKD"}, "currentAmt": {"N":"0"}  }'

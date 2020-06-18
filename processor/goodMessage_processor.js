@@ -3,11 +3,21 @@ console.log('Loading function');
 
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = async(event, context, callback) => {
+exports.handler = async (event, context, callback) => {
     for (const item of event.Records) {
         // TODO - Add validations
         // TODO - Add more business logic
-        var result = await saveItem(item);
+        var input = (({ currencyFrom, currencyTo, amountSell, amountBuy }) => (
+            { currencyFrom, currencyTo, amountSell, amountBuy }))(JSON.parse(item.body));
+
+        var result = await Promise.all([saveItem(item),
+        saveFXs({
+            currency: input.currencyFrom,
+            amount: parseFloat(input.amountSell.replace(",", "."))
+        }), saveFXs({
+            currency: input.currencyTo,
+            amount: - parseFloat(input.amountSell.replace(",", "."))
+        })]);
 
         callback(null, result);
     }
@@ -16,10 +26,10 @@ exports.handler = async(event, context, callback) => {
 };
 
 function saveItem(item) {
-   return  new Promise(resolve => {
+    return new Promise(resolve => {
 
         var inputBody = new Object();
-        
+
         inputBody.messageId = item.messageId;
         inputBody.SentTimestamp = parseInt(item.attributes.SentTimestamp);
 
@@ -27,14 +37,14 @@ function saveItem(item) {
         var ipAddressObj = msgAttr.ipAddress ? msgAttr.ipAddress : { "stringValue": "0.0.0.0" };
 
         inputBody.ipAddress = ipAddressObj.stringValue;
-        inputBody = {...inputBody, ... JSON.parse(item.body) };
+        inputBody = { ...inputBody, ...JSON.parse(item.body) };
 
         var params = {
             TableName: 'cfIncomeMessage',
             Item: inputBody
         };
-       
-        ddb.put(params, function(err, data) {
+
+        ddb.put(params, function (err, data) {
             if (err) {
                 console.log(err);
                 return err;
@@ -44,30 +54,24 @@ function saveItem(item) {
             }
         });
     });
+}
+function saveFXs(item) {
+    return new Promise(resolve => {
+        var params = {
+            TableName: 'fxAmt',
+            Key: {
+                "currency": item.currency
+            },
+            UpdateExpression: "set currentAmt =  currentAmt + :num",
+            ExpressionAttributeValues: {
+                ":num": item.amount
+            },
+        };
 
-    function saveFXs(item) {
-        return  new Promise(resolve => {
-     
-            var item = (({ currencyFrom, currencyTo, amountSell, amountBuy }) => (
-                {  currencyFrom, currencyTo, amountSell, amountBu}))(JSON.parse(item.body));
-            
-
-     
-             var params = {
-                 TableName: 'fxAmt',
-                 Item: inputBody
-             };
-            
-             ddb.put(params, function(err, data) {
-                 if (err) {
-                     console.log(err);
-                     return err;
-                 }
-                 else {
-                     return data;
-                 }
-             });
-         });
-     
+        ddb.update(params, function (err, data) {
+            if (err) console.log(err);
+            else console.log(data);
+        });
+    });
 
 }
