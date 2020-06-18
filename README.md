@@ -1,7 +1,5 @@
 The program is build by node JS and runs on AWS service, the backend is run in EC2 server.
-
-
-
+![](images/cf_hw.png)
 
 goodMessage_processor and badMessage_processor are lambda functions, it will spawn at most 5 tasks to prevent overloading the DB.
 
