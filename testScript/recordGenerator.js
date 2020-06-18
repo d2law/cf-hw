@@ -26,9 +26,10 @@ function getRandom(min, max, digit = 0) {
     return (ranVal / expo);
 }
 
+
 // 10000 good messages
 var msgCount = 0 ;
-for (var i = 0; i < 1000; i++) {
+for (var i = 0; i < 100; i++) {
     var insertBody = new FormData();
     var userId = getRandom(1234500, 12345600);
     var cFrom = getRandom(0, 7);
@@ -39,7 +40,7 @@ for (var i = 0; i < 1000; i++) {
 
     var rate = crossRate[cFrom][cTo];
     var amountBuy = getRandom(100, 10000, 2);
-    var amountSell = String.format( "%.2f", amountBuy * rate);
+    var amountSell = Math.round(amountBuy * rate *100) /100;
     var timePlaced = (new Date()).toISOString();
     var originatingCountry = countryList[getRandom(0, 9)];
 
@@ -52,12 +53,10 @@ for (var i = 0; i < 1000; i++) {
     insertBody.append('timePlaced', timePlaced);
     insertBody.append('originatingCountry', originatingCountry);
     
-
     
      axios.post('http://ec2-18-188-218-222.us-east-2.compute.amazonaws.com:30000/api/sendMessage', insertBody, { headers: insertBody.getHeaders() }).
      
      then(function (response) {
-         //console.log(response);
          msgCount++;
          console.log("Message count => " + msgCount );
     },
@@ -69,9 +68,3 @@ for (var i = 0; i < 1000; i++) {
     });
     
 }
-
-
-// // 50 bad messages
-// for (var i  = 0 ; i < 1000 ; i++){
-
-// }

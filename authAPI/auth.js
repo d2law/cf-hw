@@ -3,10 +3,11 @@ var router = express.Router();
 var config = require("./../config");
 const jwt = require('jsonwebtoken');
 
+//for future use
 router.post('/auth', function (req, res) {
     if (req.body.key == config.key) {
         var payload = {
-            key: req.body.key
+            key: req.body.key // + some secret
         };
         var token = jwt.sign(payload, config.secret, { expiresIn: 1000 });
         res.send({ token });
