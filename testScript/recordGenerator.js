@@ -39,7 +39,7 @@ for (var i = 0; i < 1000; i++) {
 
     var rate = crossRate[cFrom][cTo];
     var amountBuy = getRandom(100, 10000, 2);
-    var amountSell = amountBuy * rate;
+    var amountSell = String.format( "%.2f", amountBuy * rate);
     var timePlaced = (new Date()).toISOString();
     var originatingCountry = countryList[getRandom(0, 9)];
 
@@ -54,11 +54,19 @@ for (var i = 0; i < 1000; i++) {
     
 
     
-     axios.post('http://ec2-18-188-218-222.us-east-2.compute.amazonaws.com:30000/api/sendMessage', insertBody, { headers: insertBody.getHeaders() }).then(function (response) {
+     axios.post('http://ec2-18-188-218-222.us-east-2.compute.amazonaws.com:30000/api/sendMessage', insertBody, { headers: insertBody.getHeaders() }).
+     
+     then(function (response) {
          //console.log(response);
          msgCount++;
          console.log("Message count => " + msgCount );
-       })
+    },
+    function (reason)  {
+      console.log(reson);
+    })
+    .catch(error => {
+        console.log(error.response)
+    });
     
 }
 

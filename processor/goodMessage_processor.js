@@ -1,26 +1,31 @@
 const AWS = require('aws-sdk');
-console.log('Loading function');
-
 const ddb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event, context, callback) => {
+    var count = 0;
     for (const item of event.Records) {
+        console.log("number event =>" + count + " start");
         // TODO - Add validations
         // TODO - Add more business logic
         var input = (({ currencyFrom, currencyTo, amountSell, amountBuy }) => (
             { currencyFrom, currencyTo, amountSell, amountBuy }))(JSON.parse(item.body));
 
-        var result = await Promise.all([saveItem(item),
+        var [result1, result2, result3] = await Promise.all([saveItem(item),
         saveFXs({
             currency: input.currencyFrom,
             amount: parseFloat(input.amountSell.replace(",", "."))
         }), saveFXs({
             currency: input.currencyTo,
-            amount: - parseFloat(input.amountSell.replace(",", "."))
+            amount: - parseFloat(input.amountBuy.replace(",", "."))
         })]);
 
-        callback(null, result);
+
+
+        console.log("number event =>" + count + " end");
+        count++;
     }
+    //callback(null, [result1, result2, result3]);
+    //callback(null, result1);
 
     return `Successfully processed ${event.Records.length} messages.`;
 };
@@ -44,15 +49,12 @@ function saveItem(item) {
             Item: inputBody
         };
 
-        ddb.put(params, function (err, data) {
-            if (err) {
-                console.log(err);
-                return err;
-            }
-            else {
-                return data;
-            }
+        var dbPromise = ddb.put(params).promise();
+        dbPromise.then(function (data) {
+            console.log("data insert successful");
+            resolve(data);
         });
+
     });
 }
 function saveFXs(item) {
@@ -68,10 +70,12 @@ function saveFXs(item) {
             },
         };
 
-        ddb.update(params, function (err, data) {
-            if (err) console.log(err);
-            else console.log(data);
+        var dbPromise = ddb.update(params).promise();
+        dbPromise.then(function (data) {
+            console.log("fx update successful");
+            resolve(data);
         });
+
     });
 
 }
